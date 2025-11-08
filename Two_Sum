@@ -1,0 +1,33 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include "uthash.h"
+
+typedef struct {
+    int key;       // number value
+    int index;     // index in array
+    UT_hash_handle hh;
+} HashItem;
+
+int* twoSum(int* nums, int numsSize, int target, int* returnSize) {
+    HashItem* hashTable = NULL;
+    *returnSize = 2;
+    int* result = malloc(sizeof(int) * 2);
+
+    for (int i = 0; i < numsSize; i++) {
+        int complement = target - nums[i];
+        HashItem* item;
+        HASH_FIND_INT(hashTable, &complement, item);
+        if (item) {
+            result[0] = item->index;
+            result[1] = i;
+            return result;
+        }
+
+        item = malloc(sizeof(HashItem));
+        item->key = nums[i];
+        item->index = i;
+        HASH_ADD_INT(hashTable, key, item);
+    }
+
+    return NULL; // No solution found
+}
